@@ -1,0 +1,1 @@
+Here I am working on my first solo coding project. I might submit this to Harvard's online CS50P course, but I'll wait and see how it turns out. The implementation is simple. The game is played in the terminal. 
