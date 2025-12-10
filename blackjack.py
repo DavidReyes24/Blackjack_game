@@ -25,7 +25,7 @@ def start_game():
     while True:
         try:
             player_pot = input("How much money would you like to deposit? ").strip()
-            if re.search(r'\d{4}', player_pot):
+            if re.search(r'\d+', player_pot):
                 break
             else:
                 raise ValueError
