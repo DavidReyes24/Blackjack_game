@@ -8,6 +8,8 @@ def main():
     rd.shuffle(deck)
     
     start_game()
+    player_hand, dealer_hand = deal_hand(deck)
+    
 
 
 def start_game():
@@ -32,5 +34,11 @@ def start_game():
         except ValueError:
             print("Please deposit an appropriate amount of money")
             pass
+
+def deal_hand(deck):
+    player_hand = [deck[0], deck[2]]
+    dealer_hand = [deck[1], deck[3]]
+
+    return player_hand, dealer_hand
 
 main()
