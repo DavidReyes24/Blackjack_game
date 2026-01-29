@@ -16,22 +16,21 @@ def create_deck():
     suits = ["Spades", "Clubs", "Hearts", "Diamonds"]
     ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
     deck = []
-    for suit in suits:
-        for rank in ranks:
-            if rank == "A":
-                card = Card(suit, rank, 1)
-                deck.append(card)
-            elif rank in ["10", "J", "Q", "K"]:
-                card = Card(suit, rank, 10)
-                deck.append(card)
-            else:
-                card = Card(suit, rank, int(rank))
-                deck.append(card)
+    for i in range(8):                                  # A typical game of blackjack at a casino has at least 8 full
+        for suit in suits:                              # decks of cards. So our deck will have 8 full deck of cards  
+            for rank in ranks:                          # totalling 8 * 52 = 416 cards.    
+                if rank == "A":
+                    card = Card(suit, rank, 1)
+                    deck.append(card)
+                elif rank in ["10", "J", "Q", "K"]:
+                    card = Card(suit, rank, 10)
+                    deck.append(card)
+                else:
+                    card = Card(suit, rank, int(rank))
+                    deck.append(card)
     return deck
 
 
-def main():
+if __name__ == "__main__":
     deck = create_deck()
     print(f"Deck is {len(deck)} cards long")
-
-main()
