@@ -12,7 +12,6 @@ def main():
     start_game()                                # Starts a game
     player_hand, dealer_hand = deal_hand(deck)
     winner = standard_game(player_hand, dealer_hand)
-    
 
 
 def start_game():
@@ -27,17 +26,8 @@ def start_game():
             print("Please choose a new name")
             pass
 
-    while True:
-        try:
-            global player_pot
-            player_pot = input("How much money would you like to deposit? ").strip()
-            if re.search(r'^\d+$', player_pot):
-                break
-            else:
-                raise ValueError
-        except ValueError:
-            print("Please deposit an appropriate amount of money")
-            pass
+    global player_pot
+    player_pot = add_account_funds()
 
 
 def deal_hand(deck):
@@ -46,13 +36,28 @@ def deal_hand(deck):
 
     return player_hand, dealer_hand
 
+def add_account_funds():
+    while True:
+        try:
+            response = input("How many dollars would you like to deposit to your pot? ").strip()
+            if USD_check(response):
+                global player_pot
+                player_pot = int(response)
+                break
+            else:
+                print("Please deposit an appropriate amount of money (USD number only)")
+                raise ValueError
+        except ValueError:
+            pass
 
-def standard_game(ph, dh):
-
-    bet = input("How much will you like to bet from your deposit?")
-    player_is_ace = False
-    dealer_is_ace = False
+def USD_check(response):
+    if re.search("^\d$", response):
+        return True
+    else:
+        return False
     
+def standard_game(ph, dh):
+    ask_for_bet()
     for card in ph:
         if card.rank == "A":
             print(f"{card.rank} of {card.suit} with a value of 1 or 11")
@@ -64,6 +69,7 @@ def standard_game(ph, dh):
     # Show the dealer their hand
     print(f"Dealer's hand: {dh[0]}, *Facedown*")
 
-
+def ask_for_bet():
+    ...
 if __name__ == "__main__":
     main()
