@@ -3,6 +3,8 @@ import sys
 import re
 from blackjack_cards import create_deck
 
+player_pot = 0     # Global variable to keep track of the player's available pot
+
 def main():
     deck = create_deck()                        # Create_deck() creates a list containing the standard 52 cards
     rd.shuffle(deck)                            # Shuffles the deck 
@@ -27,8 +29,9 @@ def start_game():
 
     while True:
         try:
+            global player_pot
             player_pot = input("How much money would you like to deposit? ").strip()
-            if re.search(r'\d+', player_pot):
+            if re.search(r'^\d+$', player_pot):
                 break
             else:
                 raise ValueError
@@ -45,6 +48,8 @@ def deal_hand(deck):
 
 
 def standard_game(ph, dh):
+
+    bet = input("How much will you like to bet from your deposit?")
     player_is_ace = False
     dealer_is_ace = False
     
@@ -52,8 +57,13 @@ def standard_game(ph, dh):
         if card.rank == "A":
             print(f"{card.rank} of {card.suit} with a value of 1 or 11")
             player_is_ace = True
-            
+    
+    # Show the player their hand
     print(f"Your hand: {ph[0]}, {ph[1]}, with a sum of {ph[0].value + ph[1].value}")
 
+    # Show the dealer their hand
     print(f"Dealer's hand: {dh[0]}, *Facedown*")
-main()
+
+
+if __name__ == "__main__":
+    main()
