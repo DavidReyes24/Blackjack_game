@@ -51,13 +51,13 @@ def add_account_funds():
             pass
 
 def USD_check(response):
-    if re.search("^\d$", response):
+    if re.search(r"^\d$", response):
         return True
     else:
         return False
     
 def standard_game(ph, dh):
-    ask_for_bet()
+    bet = ask_for_bet()
     for card in ph:
         if card.rank == "A":
             print(f"{card.rank} of {card.suit} with a value of 1 or 11")
@@ -70,6 +70,34 @@ def standard_game(ph, dh):
     print(f"Dealer's hand: {dh[0]}, *Facedown*")
 
 def ask_for_bet():
-    ...
+    global player_pot
+    while True:
+        try:
+            wager = input("Please place a bet from your remaining pot funds for this game: ")
+            if USD_check(wager):
+                if int(wager) < player_pot:
+                    response = input("You have insufficient funds to place this bet. Would you like to deposit" \
+                    "the difference? Y/N: ")
+                    if response == "Y":
+                        player_pot += (int(wager) - player_pot)
+                        break
+                    else:
+                        try:
+                            response2 = input("Please deposit more funds to your pot to continue this game: ")
+                            if USD_check(response2):
+                                player_pot += int(response2)
+                                ask_for_bet()
+                            else:
+                                raise Exception("Not enough funds")
+                        except Exception as e:
+                            if e == "Not enough funds":
+                                print(f"Sorry, the game cannot continue. {e}.")
+                                sys.exit()
+            else:
+                raise ValueError
+        except ValueError:
+            print("Please input an appropriate amount in USD dollars")
+            pass
+
 if __name__ == "__main__":
     main()
