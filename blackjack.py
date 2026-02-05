@@ -64,14 +64,16 @@ def standard_game(ph, dh):
                 if bet_validation(int(bet)):
                     bet = int(bet)
                     player_pot -= bet
+                    print(f"{bet} dollars have been bet on this game. Good luck!")
                     break
                 else:
                     condition = deposit_more_funds(int(bet))
                     if condition == 1:   # Return 1: Player agreed to deposit the difference.  
                         bet = player_pot               # Return 2: Player made a different deposit.
+                        print(f"{bet} dollars have been bet for this game. Good luck!")
                         break                          # Return 0: Player refused to make a new deposit.
                     elif condition == 2:
-                        ...
+                        break
                     else:
                         sys.exit("Unable to continue the game. Please start a new one.")
             else:
@@ -83,13 +85,14 @@ def standard_game(ph, dh):
 
     for card in ph:
         if card.rank == "A":
-            print(f"{card.rank} of {card.suit} with a value of 1 or 11")
             player_is_ace = True
     
     # Show the player their hand
+    time.sleep(1.5)
     print(f"Your hand: {ph[0]}, {ph[1]}, with a sum of {ph[0].value + ph[1].value}")
 
     # Show the dealer their hand
+    time.sleep(1.5)
     print(f"Dealer's hand: {dh[0]}, *Facedown*")
 
 def bet_validation(bet):
@@ -110,19 +113,25 @@ def deposit_more_funds(bet):
         else:
             while True:
                 try:
-                    print("Let's deposit a different amount to your account to complete this bet.")
+                    print(f"Let's deposit a different amount to your account to complete this bet. " \
+                    f"Your current account holds {player_pot} dollars.")
                     response2 = input("What amount would you like to deposit to your account? ")
                     if USD_check(response2):
                         player_pot += int(response2)
+                        print(f"Your account now has {player_pot} dollars in it.")
                         response3 = input("Please place your bet for this game now. ")
                         if USD_check(response3):
                             if bet_validation(int(response3)):
                                 different_bet = int(response3)
+                                player_pot -= different_bet
+                                print(f"{different_bet} dollars have been bet for this game. Good luck!")
                                 return 2
                             else:
                                 return 0
                         else:
                             player_pot -= int(response2)
+                            print("Sorry, your bet still exceeds your account funds. " \
+                            "Your account deposit has been returned.")
                             raise ValueError
                     else:
                         raise ValueError
