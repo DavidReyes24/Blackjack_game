@@ -81,12 +81,7 @@ def standard_game(ph, dh):
         except ValueError:
             print("Please input an appropriate value in USD.")
             pass
-
-
-    for card in ph:
-        if card.rank == "A":
-            player_is_ace = True
-    
+            
     # Show the player their hand
     time.sleep(1.5)
     print(f"Your hand: {ph[0]}, {ph[1]}, with a sum of {ph[0].value + ph[1].value}")
@@ -94,6 +89,42 @@ def standard_game(ph, dh):
     # Show the dealer their hand
     time.sleep(1.5)
     print(f"Dealer's hand: {dh[0]}, *Facedown*")
+
+    # Scenario where player has a blackjack
+    ph_blackjack = False
+    if ph[0].value or ph[1].value == 10:
+        if ph[0].rank or ph[1].rank == "A":
+            print("You have blackjack")
+            ph_blackjack = True
+
+    # Scenario where dealer's faceup card is an Ace
+    if dh[0].rank == "A":
+        # Scenario where player already has blackjack
+        if ph_blackjack == True:
+            offer_even_money()
+        else:
+            offer_insurance()
+
+    # Check to see if the player can split their cards?
+    if ph[0].value == ph[1].value:
+        split_option = True
+    else:
+        split_option = False
+    
+    # Check with player how they want to proceed in the game.
+    if split_option == True:
+        game_choice = input("What would you like to do? Split, Hit, Stand, or Double Down?" ).lower()
+    else:
+        game_choice = input("What would you llke to do? Hit, Stand, or Double Down? ").lower()
+
+    while True:
+        try:
+            game_time(game_choice)
+        except:
+            ...
+
+            
+
 
 def bet_validation(bet):
     global player_pot
@@ -141,5 +172,24 @@ def deposit_more_funds(bet):
     except ValueError:
         sys.exit()
 
+def offer_even_money():
+    ...
+
+def offer_insurance():
+    ...
+
+def offer_to_split():
+    ...
+
+def game_time(decision):
+    match decision:
+        case "Stand":
+            ...
+        case "Hit":
+            ...
+        case "Double Down":
+            ...
+        case "Split":
+            ...
 if __name__ == "__main__":
     main()
