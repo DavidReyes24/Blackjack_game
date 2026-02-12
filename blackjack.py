@@ -92,7 +92,8 @@ def standard_game(ph, dh):
 
     # Scenario where player has a blackjack
     ph_blackjack = False
-    if ph[0].value == 10 or ph[1].value == 10:
+    blackjack_ranks = ["10", "J", "Q", "K"]
+    if ph[0].rank in blackjack_ranks or ph[1].rank in blackjack_ranks:
         if ph[0].rank == "A" or ph[1].rank == "A":
             print("You have blackjack")
             ph_blackjack = True
@@ -186,7 +187,7 @@ def validate_even_money():
 
 def validate_insurance():
     ...
-    
+
 def offer_to_split():
     ...
 
