@@ -13,7 +13,7 @@ def main():
     rd.shuffle(deck)                            # Shuffles the deck 
     
     start_game()
-    print(f"Player pot = {player_pot}")                                # Starts a game
+    print(f"You have deposited {player_pot} dollars to your pot.")                                # Starts a game
     player_hand, dealer_hand = deal_hand(deck)
     winner = standard_game(player_hand, dealer_hand)
 
@@ -92,8 +92,8 @@ def standard_game(ph, dh):
 
     # Scenario where player has a blackjack
     ph_blackjack = False
-    if ph[0].value or ph[1].value == 10:
-        if ph[0].rank or ph[1].rank == "A":
+    if ph[0].value == 10 or ph[1].value == 10:
+        if ph[0].rank == "A" or ph[1].rank == "A":
             print("You have blackjack")
             ph_blackjack = True
 
