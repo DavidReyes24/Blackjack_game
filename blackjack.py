@@ -113,13 +113,25 @@ def standard_game(ph, dh):
             else:
                 if offer_insurance():
                     if validate_insurance(bet):
+                        insurance_bet = bet / 2
+                        player_pot -= insurance_bet
+                        side_bet_exists = True
+                        print(f"Insurance has been purchased. Side bet is {insurance_bet} dollars")
+                        print("Checking Facedown Card...")
+                        time.sleep(2)
+                        if dh[1].rank in blackjack_ranks:
+                            print(f"Dealer's facedown is {dh[1]}.") 
+                            print(f"You lose your main bet, but earn {insurance_bet * 2} dollars from insurance.")
+                            player_pot += (insurance_bet * 2)
+                            break
+                else:
+                    continue
 
-
-        # Check to see if the player can split their cards?
-        if ph[0].value == ph[1].value:
-            split_option = True
-        else:
-            split_option = False
+    # Check to see if the player can split their cards?
+    if ph[0].value == ph[1].value:
+        split_option = True
+    else:
+        split_option = False
         
         # Check with player how they want to proceed in the game.
         if split_option == True:
