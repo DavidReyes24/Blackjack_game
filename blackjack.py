@@ -90,37 +90,42 @@ def standard_game(ph, dh):
     time.sleep(1.5)
     print(f"Dealer's hand: {dh[0]}, *Facedown*")
 
-    # Scenario where player has a blackjack
-    ph_blackjack = False
-    blackjack_ranks = ["10", "J", "Q", "K"]
-    if ph[0].rank in blackjack_ranks or ph[1].rank in blackjack_ranks:
-        if ph[0].rank == "A" or ph[1].rank == "A":
-            print("You have blackjack")
-            ph_blackjack = True
+    while True: # Needed to break away if an instant win occurs before anything else happens
+        # Scenario where player has a blackjack
+        ph_blackjack = False
+        blackjack_ranks = ["10", "J", "Q", "K"]
+        if ph[0].rank in blackjack_ranks or ph[1].rank in blackjack_ranks:
+            if ph[0].rank == "A" or ph[1].rank == "A":
+                print("You have blackjack")
+                ph_blackjack = True
 
-    # Scenario where dealer's faceup card is an Ace
-    if dh[0].rank == "A":
-        # Scenario where player already has blackjack
-        if ph_blackjack == True:
-            if offer_even_money():
-                validate_even_money()
+        # Scenario where dealer's faceup card is an Ace
+        if dh[0].rank == "A":
+            # Scenario where player already has blackjack
+            if ph_blackjack == True:
+                if offer_even_money():
+                    winnings = bet * 2              # Instant Payout 1:1
+                    print(f"You won {winnings} dollars this game.")
+                    player_pot += winnings          # Updates the player_pot with the winnings
+                    break
+                else:
+                    continue
+            else:
+                if offer_insurance():
+                    if validate_insurance(bet):
+
+
+        # Check to see if the player can split their cards?
+        if ph[0].value == ph[1].value:
+            split_option = True
         else:
-            if offer_insurance():
-                validate_insurance()
-
-
-
-    # Check to see if the player can split their cards?
-    if ph[0].value == ph[1].value:
-        split_option = True
-    else:
-        split_option = False
-    
-    # Check with player how they want to proceed in the game.
-    if split_option == True:
-        game_choice = input("What would you like to do? Split, Hit, Stand, or Double Down?" ).lower()
-    else:
-        game_choice = input("What would you llke to do? Hit, Stand, or Double Down? ").lower()
+            split_option = False
+        
+        # Check with player how they want to proceed in the game.
+        if split_option == True:
+            game_choice = input("What would you like to do? Split, Hit, Stand, or Double Down?" ).lower()
+        else:
+            game_choice = input("What would you llke to do? Hit, Stand, or Double Down? ").lower()
 
     while True:
         try:
@@ -182,11 +187,21 @@ def offer_insurance():
     response = input("Purchase insurance (Y/N)? Wager half of your game bet; payout is 2:1 ")
     return True if response == "Y" else False
 
-def validate_even_money():
-    ...
-
-def validate_insurance():
-    ...
+def validate_insurance(bet):
+    global player_pot
+    global different_bet
+    if different_bet != 0:
+        if (different_bet/2) > player_pot:
+            print("Sorry, you do not have enough funds to buy insurance. We will continue without it.")
+            return False
+        else:
+            return True
+    else:
+        if (bet/2) > player_pot:
+            print("Sorry, you do not have enough funds to buy insurance. We will continue without it.")
+            return False
+        else:
+            return True
 
 def offer_to_split():
     ...
