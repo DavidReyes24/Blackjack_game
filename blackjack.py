@@ -101,9 +101,13 @@ def standard_game(ph, dh):
     if dh[0].rank == "A":
         # Scenario where player already has blackjack
         if ph_blackjack == True:
-            offer_even_money()
+            if offer_even_money():
+                validate_even_money()
         else:
-            offer_insurance()
+            if offer_insurance():
+                validate_insurance()
+
+
 
     # Check to see if the player can split their cards?
     if ph[0].value == ph[1].value:
@@ -122,9 +126,6 @@ def standard_game(ph, dh):
             game_time(game_choice)
         except:
             ...
-
-            
-
 
 def bet_validation(bet):
     global player_pot
@@ -173,11 +174,19 @@ def deposit_more_funds(bet):
         sys.exit()
 
 def offer_even_money():
-    ...
+    response = input("Would you like even money (Y/N)? Instant payout of 1:1. ")
+    return True if response == "Y" else False
 
 def offer_insurance():
+    response = input("Purchase insurance (Y/N)? Wager half of your game bet; payout is 2:1 ")
+    return True if response == "Y" else False
+
+def validate_even_money():
     ...
 
+def validate_insurance():
+    ...
+    
 def offer_to_split():
     ...
 
