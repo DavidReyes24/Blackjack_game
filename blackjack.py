@@ -5,7 +5,7 @@ import time
 from blackjack_cards import create_deck
 
 player_pot = 0     # Global variable to keep track of the player's available pot
-different_bet = 0
+different_bet = 0  # Global variable used to save a different bet for a game after depositing funds
 
 def main():
     global player_pot
