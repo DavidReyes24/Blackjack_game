@@ -61,7 +61,7 @@ def standard_game(ph, dh, pd_deck):
     while True:
         try:
             bet = input("Please place a bet from your remaining pot funds for this game: ")
-            if USD_check(bet):
+            if USD_check(bet) and int(bet) != 0:
                 if bet_validation(int(bet)):
                     bet = int(bet)
                     player_pot -= bet
@@ -147,7 +147,7 @@ def standard_game(ph, dh, pd_deck):
 
 def bet_validation(bet):
     global player_pot
-    return True if bet <= player_pot else False
+    return True if 0 < bet <= player_pot else False
 
 def deposit_more_funds(bet):
     global player_pot
@@ -225,12 +225,64 @@ def game_time(decision, dh, ph, deck):
             time.sleep(1.5)
             print(f"Dealer's facedown: {dh[1]}")
             dh_sum = dh[0].value + dh[1].value
-            #while dh_sum <= 17:
+            print(f"Dealer has a sum of {dh_sum}")
+            while True:
+                if dh_sum > 17 and dh_sum <= 21:
+                    print("No more cards will be drawn")
+                    determine_winner()
+                    break
+                else:
+                    i = 2   # index to use to sum new card.value
+                    while dh_sum <= 17:
+                        print("Dealer will draw another card")
+                        dh.append(deck[0])
+                        deck.pop(0)
+                        print("Dealer's hand: ", end="")
+                        for card in len(dh):
+                            print(card + ", ", end="")
+                        dh_sum += dh[i].value
+                        print(f"Dealer has a sum of {dh_sum}")
+                        i += 1
+                        if dh_sum > 21:
+                            print("Dealer has bust")
+                            determine_winner()
+                            break
+                        elif dh_sum == 21:
+                            print("Dealer has blackjack")
+                            determine_winner()
+                            break
+                        time.sleep(2)                
         case "hit":
             print("Player has chosen to Hit.")
+            ph_sum = ph[0].value + ph[1].value
+            time.sleep(1.5)
+            i = 2   # index to help compute update ph_sum
+            while ph_sum < 21:
+                ph.append(deck(0))
+                deck.pop(0)
+                print("Your hand: ", end="")
+                for card in len(ph):
+                    print(card + ", ", end="")
+                ph_sum += ph[i].value
+                print(f"sum of {ph_sum}")
+                i += 1
+                if ph_sum > 21:
+                    print("You have bust")
+                    determine_winner()
+                elif ph_sum == 21:
+                    print("You have blackjack")
+                    determine_winner()
+                response = input("Would you like to hit or stand? ").lower().strip()
+                if response == "stand":
+                    determine_winner()
+                elif response == "hit":
+                    continue
         case "double down":
             print("Player has chosen to Double Down.")
         case "split":
             print("Player has chosen to Split")
+
+def determine_winner():
+    ...
 if __name__ == "__main__":
     main()
