@@ -252,11 +252,14 @@ def game_time(decision, dh, ph, deck):
                             determine_winner()
                             break
                         time.sleep(2)                
+        
         case "hit":
             print("Player has chosen to Hit.")
             ph_sum = ph[0].value + ph[1].value
+            dh_sum = dh[0].value + dh[1].value
             time.sleep(1.5)
-            i = 2   # index to help compute update ph_sum
+            i_ph = 2, i_dh = 2   # indeces to help update ph_sum & dh_sum
+            # First we ask the player how many times they want to hit
             while ph_sum < 21:
                 ph.append(deck(0))
                 deck.pop(0)
@@ -265,20 +268,50 @@ def game_time(decision, dh, ph, deck):
                     print(card + ", ", end="")
                 ph_sum += ph[i].value
                 print(f"sum of {ph_sum}")
-                i += 1
+                i_ph += 1
                 if ph_sum > 21:
                     print("You have bust")
                     determine_winner()
+                    break
                 elif ph_sum == 21:
                     print("You have blackjack")
                     determine_winner()
-                response = input("Would you like to hit or stand? ").lower().strip()
+                    break
+                
+                response = input("Would you like to Stand or Hit? ").lower().strip()
                 if response == "stand":
-                    determine_winner()
+                    break
                 elif response == "hit":
                     continue
+                time.sleep(2)
+            time.sleep(2)
+            
+            # Next we have the dealer draw cards
+            while dh_sum <= 17:
+                print("Dealer will now draw")
+                time.sleep(1.5)
+                dh.append(deck[0])
+                deck.pop(0)
+                print("Dealer's hand: ", end="")
+                for card in len(dh):
+                    print(card + ", ", end="")
+                dh_sum += dh[i].value
+                print(f"Dealer has a sum of {dh_sum}")
+                i_dh += 1
+                if dh_sum > 21:
+                    print("Dealer has bust")
+                    determine_winner()
+                    break
+                elif dh_sum == 21:
+                    print("Dealer has blackjack")
+                    determine_winner()
+                    break
+                time.sleep(2)    
+            determine_winner()
         case "double down":
             print("Player has chosen to Double Down.")
+
+
         case "split":
             print("Player has chosen to Split")
 
