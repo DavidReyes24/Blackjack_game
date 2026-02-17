@@ -39,7 +39,6 @@ def deal_hand(deck):
     dealer_hand = [deck[1], deck[3]]
     post_deal_deck = deck[4:]
 
-
     return player_hand, dealer_hand, post_deal_deck
 
 def add_account_funds():
@@ -142,7 +141,7 @@ def standard_game(ph, dh, pd_deck):
             
         while True:
             try:
-                game_time(game_choice, dh, ph)
+                game_time(game_choice, dh, ph, pd_deck)
             except:
                 ...
 
