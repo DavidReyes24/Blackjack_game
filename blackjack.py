@@ -14,8 +14,8 @@ def main():
     
     start_game()
     print(f"You have deposited {player_pot} dollars to your pot.")                                # Starts a game
-    player_hand, dealer_hand = deal_hand(deck)
-    winner = standard_game(player_hand, dealer_hand)
+    player_hand, dealer_hand, post_deal_deck = deal_hand(deck)
+    winner = standard_game(player_hand, dealer_hand, post_deal_deck)
 
 
 def start_game():
@@ -37,8 +37,10 @@ def start_game():
 def deal_hand(deck):
     player_hand = [deck[0], deck[2]]
     dealer_hand = [deck[1], deck[3]]
+    post_deal_deck = deck[4:]
 
-    return player_hand, dealer_hand
+
+    return player_hand, dealer_hand, post_deal_deck
 
 def add_account_funds():
     while True:
@@ -55,7 +57,7 @@ def add_account_funds():
 def USD_check(response):
     return True if re.search(r"^\d+$", response) else False
     
-def standard_game(ph, dh):
+def standard_game(ph, dh, pd_deck):
     global player_pot
     while True:
         try:
@@ -120,30 +122,29 @@ def standard_game(ph, dh):
                         print("Checking Facedown Card...")
                         time.sleep(2)
                         if dh[1].rank in blackjack_ranks:
-                            print(f"Dealer's facedown is {dh[1]}.") 
+                            print(f"Dealer's facedown is {dh[1]}, therefore the dealer has blackjack.") 
                             print(f"You lose your main bet, but earn {insurance_bet * 2} dollars from insurance.")
                             player_pot += (insurance_bet * 2)
                             break
-                else:
-                    continue
 
-    # Check to see if the player can split their cards?
-    if ph[0].value == ph[1].value:
-        split_option = True
-    else:
-        split_option = False
-        
+        # Check to see if the player can split their cards?
+        if ph[0].value == ph[1].value:
+            split_option = True
+        else:
+            split_option = False
+            
         # Check with player how they want to proceed in the game.
         if split_option == True:
-            game_choice = input("What would you like to do? Split, Hit, Stand, or Double Down?" ).lower()
+            game_choice = input("What would you like to do? Split, Hit, Stand, or Double Down? ").lower()
+            
         else:
             game_choice = input("What would you llke to do? Hit, Stand, or Double Down? ").lower()
-
-    while True:
-        try:
-            game_time(game_choice)
-        except:
-            ...
+            
+        while True:
+            try:
+                game_time(game_choice, dh, ph)
+            except:
+                ...
 
 def bet_validation(bet):
     global player_pot
@@ -218,15 +219,19 @@ def validate_insurance(bet):
 def offer_to_split():
     ...
 
-def game_time(decision):
+def game_time(decision, dh, ph, deck):
     match decision:
-        case "Stand":
-            ...
-        case "Hit":
-            ...
-        case "Double Down":
-            ...
-        case "Split":
-            ...
+        case "stand":
+            print("Player has chosen to Stand.")
+            time.sleep(1.5)
+            print(f"Dealer's facedown: {dh[1]}")
+            dh_sum = dh[0].value + dh[1].value
+            #while dh_sum <= 17:
+        case "hit":
+            print("Player has chosen to Hit.")
+        case "double down":
+            print("Player has chosen to Double Down.")
+        case "split":
+            print("Player has chosen to Split")
 if __name__ == "__main__":
     main()
