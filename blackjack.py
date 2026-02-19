@@ -15,6 +15,8 @@ def main():
     start_game()
     print(f"You have deposited {player_pot} dollars to your pot.")                                # Starts a game
     player_hand, dealer_hand, post_deal_deck = deal_hand(deck)
+    print(type(player_hand))
+    print(type(dealer_hand))
     winner = standard_game(player_hand, dealer_hand, post_deal_deck)
 
 
@@ -238,8 +240,9 @@ def game_time(decision, dh, ph, deck):
                         dh.append(deck[0])
                         deck.pop(0)
                         print("Dealer's hand: ", end="")
-                        for card in len(dh):
-                            print(card + ", ", end="")
+                        for card in dh:
+                            print(card, ", ", end="")
+                        print()
                         dh_sum += dh[i].value
                         print(f"Dealer has a sum of {dh_sum}")
                         i += 1
@@ -258,33 +261,43 @@ def game_time(decision, dh, ph, deck):
             ph_sum = ph[0].value + ph[1].value
             dh_sum = dh[0].value + dh[1].value
             time.sleep(1.5)
-            i_ph = 2, i_dh = 2   # indeces to help update ph_sum & dh_sum
+            i_ph, i_dh = 2, 2   # indeces to help update ph_sum & dh_sum
             # First we ask the player how many times they want to hit
             while ph_sum < 21:
-                ph.append(deck(0))
+                print("Testing...")
+                ph.append(deck[0])
+                print("What the heck???")
                 deck.pop(0)
                 print("Your hand: ", end="")
-                for card in len(ph):
-                    print(card + ", ", end="")
-                ph_sum += ph[i].value
+                for card in ph:
+                    print(card, ", ", end="")
+                print()
+                ph_sum += ph[i_ph].value
                 print(f"sum of {ph_sum}")
                 i_ph += 1
                 if ph_sum > 21:
                     print("You have bust")
-                    determine_winner()
-                    break
+                    player_bust = True
                 elif ph_sum == 21:
                     print("You have blackjack")
-                    determine_winner()
-                    break
+                    player_blackjack = True
+                else:
+                    player_bust = False
+                    player_blackjack = False
                 
-                response = input("Would you like to Stand or Hit? ").lower().strip()
-                if response == "stand":
+                if player_blackjack or player_bust:
                     break
-                elif response == "hit":
-                    continue
-                time.sleep(2)
+
+                if not player_bust:
+                    response = input("Would you like to Stand or Hit? ").lower().strip()
+                    if response == "stand":
+                        break
+                    elif response == "hit":
+                        continue
+                    time.sleep(2)
             time.sleep(2)
+            
+            print()
             
             # Next we have the dealer draw cards
             while dh_sum <= 17:
@@ -293,19 +306,21 @@ def game_time(decision, dh, ph, deck):
                 dh.append(deck[0])
                 deck.pop(0)
                 print("Dealer's hand: ", end="")
-                for card in len(dh):
-                    print(card + ", ", end="")
-                dh_sum += dh[i].value
+                for card in dh:
+                    print(card, ", ", end="")
+                print()
+                dh_sum += dh[i_dh].value
                 print(f"Dealer has a sum of {dh_sum}")
                 i_dh += 1
                 if dh_sum > 21:
                     print("Dealer has bust")
-                    determine_winner()
-                    break
+                    dealer_bust = True
                 elif dh_sum == 21:
                     print("Dealer has blackjack")
-                    determine_winner()
-                    break
+                    dealer_blackjack = True
+                else:
+                    dealer_bust = False
+                    dealer_blackjack = False
                 time.sleep(2)    
             determine_winner()
         case "double down":
