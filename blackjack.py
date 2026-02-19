@@ -18,6 +18,7 @@ def main():
     print(type(player_hand))
     print(type(dealer_hand))
     winner = standard_game(player_hand, dealer_hand, post_deal_deck)
+    print(f"The {winner} has won this game")
 
 
 def start_game():
@@ -136,16 +137,15 @@ def standard_game(ph, dh, pd_deck):
             
         # Check with player how they want to proceed in the game.
         if split_option == True:
-            game_choice = input("What would you like to do? Split, Hit, Stand, or Double Down? ").lower()
-            
+            game_choice = input("What would you like to do? Split, Hit, Stand, or Double Down? ").lower()    
         else:
             game_choice = input("What would you llke to do? Hit, Stand, or Double Down? ").lower()
             
         while True:
             try:
-                game_time(game_choice, dh, ph, pd_deck)
+                return game_time(game_choice, dh, ph, pd_deck)
             except:
-                ...
+                sys.exit("An Error Has Occurred")
 
 def bet_validation(bet):
     global player_pot
@@ -277,24 +277,22 @@ def game_time(decision, dh, ph, deck):
                 i_ph += 1
                 if ph_sum > 21:
                     print("You have bust")
-                    player_bust = True
+                    return "Dealer"         # The dealer wins this situation automatically
                 elif ph_sum == 21:
                     print("You have blackjack")
                     player_blackjack = True
                 else:
-                    player_bust = False
                     player_blackjack = False
                 
-                if player_blackjack or player_bust:
+                if player_blackjack:
                     break
 
-                if not player_bust:
-                    response = input("Would you like to Stand or Hit? ").lower().strip()
-                    if response == "stand":
-                        break
-                    elif response == "hit":
-                        continue
+                response = input("Would you like to Stand or Hit? ").lower().strip()
+                if response == "stand":
+                    break
+                elif response == "hit":
                     time.sleep(2)
+                    continue
             time.sleep(2)
             
             print()
@@ -314,15 +312,19 @@ def game_time(decision, dh, ph, deck):
                 i_dh += 1
                 if dh_sum > 21:
                     print("Dealer has bust")
-                    dealer_bust = True
+                    return "Player"
                 elif dh_sum == 21:
                     print("Dealer has blackjack")
                     dealer_blackjack = True
                 else:
-                    dealer_bust = False
                     dealer_blackjack = False
+                
+                if dealer_blackjack:
+                    break
+
                 time.sleep(2)    
-            determine_winner()
+            
+            return determine_winner(ph_sum, dh_sum)
         case "double down":
             print("Player has chosen to Double Down.")
 
@@ -330,7 +332,12 @@ def game_time(decision, dh, ph, deck):
         case "split":
             print("Player has chosen to Split")
 
-def determine_winner():
-    ...
+def determine_winner(player_sum, dealer_sum):
+    if player_sum > dealer_sum:
+        return "Player"
+    elif dealer_sum > player_sum:
+        return "Dealer"
+    else:
+        return "Tie"
 if __name__ == "__main__":
     main()
