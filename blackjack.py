@@ -94,6 +94,11 @@ def standard_game(ph, dh, pd_deck):
     time.sleep(1.5)
     print(f"Dealer's hand: {dh[0]}, *Facedown*")
 
+    # Assign a potential 2nd value if the dealer or player have an Ace in their hand
+    # Make this a function
+    ph_second_value_needed = check_for_ace(ph)
+    dh_second_value_needed = check_for_ace(dh)
+
     while True: # Needed to break away if an instant win occurs before anything else happens
         # Scenario where player has a blackjack
         ph_blackjack = False
@@ -147,6 +152,13 @@ def standard_game(ph, dh, pd_deck):
             except:
                 sys.exit("An Error Has Occurred")
 
+def check_for_ace(hand):
+    for card in hand:
+        if card.rank == "A":
+            return True
+    
+    return False
+        
 def bet_validation(bet):
     global player_pot
     return True if 0 < bet <= player_pot else False
@@ -299,6 +311,7 @@ def game_time(decision, dh, ph, deck):
             
             # Next we have the dealer draw cards
             while dh_sum <= 17:
+                print(f"Dealer's facedown: {dh[1]}")
                 print("Dealer will now draw")
                 time.sleep(1.5)
                 dh.append(deck[0])
