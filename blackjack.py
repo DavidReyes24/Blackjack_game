@@ -96,8 +96,8 @@ def standard_game(ph, dh, pd_deck):
 
     # Assign a potential 2nd value if the dealer or player have an Ace in their hand
     # Make this a function
-    ph_second_value_needed = check_for_ace(ph)
-    dh_second_value_needed = check_for_ace(dh)
+    ph_includes_ace = check_for_ace(ph)
+    dh_includes_ace = check_for_ace(dh)
 
     while True: # Needed to break away if an instant win occurs before anything else happens
         # Scenario where player has a blackjack
@@ -117,8 +117,6 @@ def standard_game(ph, dh, pd_deck):
                     print(f"You won {winnings} dollars this game.")
                     player_pot += winnings          # Updates the player_pot with the winnings
                     break
-                else:
-                    continue
             else:
                 if offer_insurance():
                     if validate_insurance(bet):
@@ -133,6 +131,9 @@ def standard_game(ph, dh, pd_deck):
                             print(f"You lose your main bet, but earn {insurance_bet * 2} dollars from insurance.")
                             player_pot += (insurance_bet * 2)
                             break
+                    else:
+                        print("Continuing the game")
+                        time.sleep(2)
 
         # Check to see if the player can split their cards?
         if ph[0].value == ph[1].value:
@@ -142,13 +143,13 @@ def standard_game(ph, dh, pd_deck):
             
         # Check with player how they want to proceed in the game.
         if split_option == True:
-            game_choice = input("What would you like to do? Split, Hit, Stand, or Double Down? ").lower()    
+            game_choice = input("What would you like to do? Split, Hit, Stand, or Double Down? ").lower().strip()   
         else:
-            game_choice = input("What would you llke to do? Hit, Stand, or Double Down? ").lower()
+            game_choice = input("What would you llke to do? Hit, Stand, or Double Down? ").lower().strip()
             
         while True:
             try:
-                return game_time(game_choice, dh, ph, pd_deck)
+                return game_time(game_choice, dh, ph, pd_deck, ph_includes_ace, dh_includes_ace)
             except:
                 sys.exit("An Error Has Occurred")
 
@@ -210,7 +211,7 @@ def offer_even_money():
     return True if response == "Y" else False
 
 def offer_insurance():
-    response = input("Purchase insurance (Y/N)? Wager half of your game bet; payout is 2:1 ")
+    response = input("Purchase insurance (Y/N)? Wager half of your game bet for a potential side payout of 2:1 ")
     return True if response == "Y" else False
 
 def validate_insurance(bet):
